@@ -1,0 +1,54 @@
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "distro/{{ ansible_os_family }}.yaml"
+    - main.yaml
+
+- include_vars:
+    file: "ips.yaml"
+
+- name: Install tinc
+  become: true
+  package:
+    name: tinc
+    state: present
+
+- name: Ensure hosts directory exists
+  become: true
+  file:
+    path: "{{ tinc_etc }}/tyilnet/hosts"
+    state: directory
+
+- name: Copy hosts
+  become: true
+  copy:
+    src: hosts/
+    dest: "{{ tinc_etc }}/tyilnet/hosts/"
+
+- name: Setup tinc.conf
+  become: true
+  template:
+    src: tinc.j2
+    dest: "{{ tinc_etc}}/tyilnet/tinc.conf"
+
+- name: Setup tinc-up
+  become: true
+  template:
+    src: tinc-up.j2
+    dest: "{{ tinc_etc }}/tyilnet/tinc-up"
+    mode: "u+x"
+
+- name: Setup tinc-down
+  become: true
+  copy:
+    src: tinc-down
+    dest: "{{ tinc_etc }}/tyilnet/tinc-down"
+    mode: "u+x"
+
+- name: Enable tinc service
+  become: true
+  service:
+    name: "{{ tinc_service }}"
+    enabled: yes
+    state: restarted
+

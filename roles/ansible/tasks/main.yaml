@@ -1,0 +1,50 @@
+---
+- name: Ensure ansible user exists
+  become: true
+  when: ansible_user != "ansible"
+  user:
+    name: ansible
+    system: true
+    home: /etc/ansible
+    generate_ssh_key: true
+
+- name: Enable authorized_keys
+  become: true
+  authorized_key:
+    user: ansible
+    exclusive: true
+    key: "{{ item }}"
+  with_file:
+    - keys/krata.pub
+
+- name: Reset permissions on authorized_keys
+  become: true
+  file:
+    path: ~ansible/.ssh/authorized_keys
+    owner: ansible
+    group: ansible
+
+- name: Check if /etc/sudoers.d exists
+  stat:
+    path: /etc/sudoers.d
+  register: sudoers
+
+- name: Allow password-less sudo in /etc/sudoers
+  become: true
+  when: sudoers.stat.exists
+  copy:
+    src: sudoers
+    dest: /etc/sudoers.d/ansible
+
+- name: Check if /usr/local/etc/sudoers exists
+  stat:
+    path: /usr/local/etc/sudoers
+  register: local_sudoers
+
+- name: Allow password-less sudo in /usr/local/etc/sudoers
+  become: true
+  when: local_sudoers.stat.exists
+  copy:
+    src: sudoers
+    dest: /usr/local/etc/sudoers.d/ansible
+

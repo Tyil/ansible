@@ -1,0 +1,9 @@
+10.0.1.1 # tinc.tyil.net
+
+[workstations]
+10.0.1.2 # sessifet.tyil.net
+10.0.1.3 # krata.tyil.net
+
+[servers]
+maeki.tyil.net # znc.tyil.net
+
