@@ -1,0 +1,3 @@
+dev-lang/php cgi fpm sockets mysqli zip
+app-eselect/eselect-php fpm
+

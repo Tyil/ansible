@@ -1,0 +1,20 @@
+- name: Install configuration files
+  become: true
+  copy:
+    src: portage/
+    dest: /etc/portage/
+    owner: portage
+    group: portage
+  register: portage_installed
+
+- name: Install machine-specific make.conf
+  when:
+    - portage_installed|success
+  become: true
+  template:
+    src: make.j2
+    dest: /etc/portage/make.conf/90-local.conf
+    owner: portage
+    group: portage
+    force: false
+

@@ -1,0 +1,13 @@
+#
+# machine specific settings
+#
+# Generated on {{ ansible_date_time.date }}
+#
+
+MAKEOPTS="-j{{ (ansible_processor_vcpus + 1) }}"
+VIDEO_CARDS=""
+
+USE="
+	${USE}
+"
+

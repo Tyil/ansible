@@ -1,0 +1,25 @@
+---
+- name: Ensure portage directory exists
+  become: true
+  file:
+    path: /etc/portage
+    state: directory
+    owner: portage
+    group: portage
+
+- name: Ensure distfiles directory exists
+  become: true
+  file:
+    path: /var/distfiles
+    state: directory
+    owner: portage
+    group: portage
+
+- name: Ensure packages directory exists
+  become: true
+  file:
+    path: /var/packages
+    state: directory
+    owner: portage
+    group: portage
+
