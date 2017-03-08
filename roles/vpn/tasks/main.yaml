@@ -12,40 +12,64 @@
   package:
     name: tinc
     state: present
+  register: tinc_installed
+
+- name: Ensure network directory exists
+  become: true
+  file:
+    path: "{{ tinc_etc }}/tyilnet"
+    state: directory
+  register: tinc_network_dir
 
 - name: Ensure hosts directory exists
+  when: tinc_network_dir|success
   become: true
   file:
     path: "{{ tinc_etc }}/tyilnet/hosts"
     state: directory
+  register: tinc_hosts_dir
 
 - name: Copy hosts
+  when: tinc_hosts_dir|success
   become: true
   copy:
     src: hosts/
     dest: "{{ tinc_etc }}/tyilnet/hosts/"
+  register: tinc_hosts
 
 - name: Setup tinc.conf
+  when: tinc_network_dir|success
   become: true
   template:
     src: tinc.j2
     dest: "{{ tinc_etc}}/tyilnet/tinc.conf"
+  register: tinc_conf
 
 - name: Setup tinc-up
+  when: tinc_network_dir|success
   become: true
   template:
     src: tinc-up.j2
     dest: "{{ tinc_etc }}/tyilnet/tinc-up"
     mode: "u+x"
+  register: tinc_up
 
 - name: Setup tinc-down
+  when: tinc_network_dir|success
   become: true
   copy:
     src: tinc-down
     dest: "{{ tinc_etc }}/tyilnet/tinc-down"
     mode: "u+x"
+  register: tinc_down
 
 - name: Enable tinc service
+  when:
+    - tinc_installed|success
+    - tinc_hosts|success
+    - tinc_up|success
+    - tinc_down|success
+    - tinc_conf|success
   become: true
   service:
     name: "{{ tinc_service }}"
