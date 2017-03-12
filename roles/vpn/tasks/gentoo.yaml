@@ -1,0 +1,21 @@
+- name: Ensure accept_keywords directory exists
+  when: ansible_os_family == "Gentoo"
+  become: true
+  file:
+    path: /etc/portage/package.accept_keywords
+    state: directory
+    owner: portage
+    group: portage
+  register: portage_dir
+
+- name: Install accept_keyword file
+  when:
+    - ansible_os_family == "Gentoo"
+    - portage_dir|success
+  become: true
+  become_user: portage
+  copy:
+    src: gentoo-accept-keywords
+    dest: /etc/portage/package.accept_keywords/30-tinc.accept_keywords
+  register: install_keywords
+

@@ -7,6 +7,9 @@
 - include_vars:
     file: "ips.yaml"
 
+- name: Setup portage keywords
+  include: gentoo.yaml
+
 - name: Install tinc
   become: true
   package:
@@ -62,6 +65,13 @@
     dest: "{{ tinc_etc }}/tyilnet/tinc-down"
     mode: "u+x"
   register: tinc_down
+
+- name: Register network in conf.d
+  when: ansible_os_family == "Gentoo"
+  become: true
+  copy:
+    src: gentoo-tinc-networks
+    dest: /etc/conf.d/tinc.networks
 
 - name: Enable tinc service
   when:
