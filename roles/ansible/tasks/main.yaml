@@ -48,3 +48,10 @@
     src: sudoers
     dest: /usr/local/etc/sudoers.d/ansible
 
+- name: Install ap script
+  become: true
+  copy:
+    src: ap.sh
+    dest: /usr/local/bin/ap
+    mode: 0755
+
