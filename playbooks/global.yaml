@@ -3,4 +3,5 @@
   roles:
     - vpn
     - ansible
+    - ntp
 

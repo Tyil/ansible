@@ -1,0 +1,29 @@
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "distro/{{ ansible_os_family }}.yaml"
+    - main.yaml
+
+- name: Install ntp
+  become: true
+  package:
+    name: ntp
+    state: present
+  register: ntp_installed
+
+- name: Configure ntp
+  when: ntp_installed|success
+  become: true
+  copy:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+  register: ntp_configured
+
+- name: Enable ntp
+  when: ntp_configured|success
+  become: true
+  service:
+    name: "{{ ntp_service }}"
+    enabled: true
+    state: started
+
