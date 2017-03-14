@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/tyil/projects/rerander/pdfgenerator'
+let g:netrw_dirhist_2='/home/tyil/projects/rerander/pdfgenerator/config'
+let g:netrw_dirhist_3='/home/tyil/projects/rerander/pdfgenerator'
+let g:netrw_dirhist_4='/home/tyil/projects/rerander/pdfgenerator/resources/lang/nl_NL'
+let g:netrw_dirhist_5='/home/tyil/projects/rerander/pdfgenerator'
+let g:netrw_dirhist_6='/home/tyil/projects/rerander/pdfgenerator/app'
+let g:netrw_dirhist_7='/home/tyil/projects/rerander/pdfgenerator'
+let g:netrw_dirhist_8='/home/tyil/projects/rerander/pdfgenerator/config'
+let g:netrw_dirhist_9='/etc/ansible/roles/portage/files/portage/env'

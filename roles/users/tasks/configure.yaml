@@ -1,0 +1,57 @@
+- name: Copy zshrc
+  become: true
+  copy:
+    src: zshrc
+    dest: "~{{ item.name }}/.zshrc"
+  with_items: "{{ users }}"
+
+- name: Copy general shell config
+  become: true
+  copy:
+    src: config/shell
+    dest: "~{{ item.name }}/.config"
+  with_items: "{{ users }}"
+
+- name: Ensure .scripts directory exists
+  become: true
+  file:
+    path: "~{{ item.name }}/.scripts"
+    state: directory
+  with_items: "{{ users }}"
+
+- name: Copy general scripts
+  become: true
+  copy:
+    src: scripts/
+    dest: "~{{ item.name }}/.scripts/"
+  with_items: "{{ users }}"
+
+- name: Make scripts executable
+  become: true
+  file:
+    path: "~{{ item.name }}/.scripts"
+    mode: 0755
+    recurse: true
+  with_items: "{{ users }}"
+
+- name: Copy tmux config
+  become: true
+  copy:
+    src: tmux.conf
+    dest: "~{{ item.name }}/.tmux.conf"
+  with_items: "{{ users }}"
+
+- name: Copy git config
+  become: true
+  copy:
+    src: gitconfig
+    dest: "~{{ item.name }}/.gitconfig"
+  with_items: "{{ users }}"
+
+- name: Copy bare vim config
+  become: true
+  copy:
+    src: vim
+    dest: "~{{ item.name }}/.vim"
+  with_items: "{{ users }}"
+

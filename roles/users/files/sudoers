@@ -1,0 +1,3 @@
+# allow users in the `wheel` group to use sudo
+%wheel ALL=(ALL) ALL
+

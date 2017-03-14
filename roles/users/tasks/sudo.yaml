@@ -1,0 +1,16 @@
+- name: Install sudo
+  become: true
+  package:
+    name: sudo
+
+- name: Ensure group wheel exists
+  become: true
+  group:
+    name: wheel
+
+- name: Setup wheel users to sudo
+  become: true
+  copy:
+    src: sudoers
+    dest: "{{ paths.sudoers }}/wheel"
+

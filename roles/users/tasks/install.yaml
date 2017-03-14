@@ -1,0 +1,20 @@
+- name: Install zsh
+  become: true
+  package:
+    name: zsh
+
+- name: Install tmux
+  become: true
+  package:
+    name: tmux
+
+- name: Install vim
+  become: true
+  package:
+    name: vim
+
+- name: Install git
+  become: true
+  package:
+    name: git
+

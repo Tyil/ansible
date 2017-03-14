@@ -1,0 +1,4 @@
+paths:
+  sudoers: /usr/local/etc/sudoers.d
+  zsh: /usr/local/bin/zsh
+

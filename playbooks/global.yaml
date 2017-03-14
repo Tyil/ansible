@@ -4,4 +4,11 @@
     - vpn
     - ansible
     - ntp
+    - users
+  vars:
+    users:
+      - name: tyil
+        groups:
+          wheel
+        shell: zsh
 
