@@ -9,7 +9,7 @@ main()
 
 	if [ "$?" = 0 ]
 	then
-		rm ~ansible/playbooks/"${playbook}".retry
+		rm -f ~ansible/playbooks/"${playbook}".retry
 	fi
 }
 
