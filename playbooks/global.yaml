@@ -11,4 +11,6 @@
         groups:
           wheel
         shell: zsh
+        pubkeys:
+          tyil
 

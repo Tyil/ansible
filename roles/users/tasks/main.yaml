@@ -21,27 +21,10 @@
   register: users_exist
   with_items: "{{ users }}"
 
-- name: Ensure the ~/.ssh directory exists
-  become: true
-  file:
-    path: "~{{ item.name }}/.ssh"
-    owner: "{{ item.name }}"
-    group: "{{ item.name }}"
-    state: directory
-    mode: 0700
+- include: keys.yaml
   with_items: "{{ users }}"
-
-- name: Set authorized_keys
-  ignore_errors: true
-  become: true
-  copy:
-    src: "authorized_keys/{{ item.name }}"
-    dest: "~{{ item.name }}/.ssh/authorized_keys"
-    owner: "{{ item.name }}"
-    group: "{{ item.name }}"
-    mode: 0600
-  with_items:
-    - "{{ users }}"
+  loop_control:
+    loop_var: user
 
 - name: Ensure the ~/.config directory exists
   become: true

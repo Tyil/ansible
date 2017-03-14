@@ -1,0 +1,10 @@
+- name: "Setup authorized_keys for {{ user.name }}"
+  ignore_errors: true
+  become: true
+  authorized_key:
+    exclusive: true
+    user: "{{ user.name }}"
+    key: "{{ lookup('file', item) }}"
+  with_fileglob:
+    - "authorized_keys/{{ user.pubkeys }}/*"
+
