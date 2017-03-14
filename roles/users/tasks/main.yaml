@@ -15,7 +15,7 @@
   user:
     name: "{{ item.name }}"
     shell: "{{ paths[item.shell] }}"
-    groups: "{{ item.groups }}"
+    groups: "{{ item.groups|default() }}"
     generate_ssh_key: true
     ssh_key_comment: "{{ item.name }}@{{ ansible_hostname }}"
   register: users_exist
@@ -32,6 +32,7 @@
   with_items: "{{ users }}"
 
 - name: Set authorized_keys
+  ignore_errors: true
   become: true
   copy:
     src: "authorized_keys/{{ item.name }}"
