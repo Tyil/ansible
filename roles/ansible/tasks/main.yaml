@@ -24,26 +24,41 @@
     owner: ansible
     group: ansible
 
+- name: Ensure sudo is available
+  become: true
+  package:
+    name: sudo
+    state: present
+  register: sudo
+
 - name: Check if /etc/sudoers.d exists
+  when:
+    - sudo|success
   stat:
     path: /etc/sudoers.d
   register: sudoers
 
 - name: Allow password-less sudo in /etc/sudoers
   become: true
-  when: sudoers.stat.exists
+  when:
+    - sudo|success
+    - sudoers.stat.exists
   copy:
     src: sudoers
     dest: /etc/sudoers.d/ansible
 
 - name: Check if /usr/local/etc/sudoers exists
+  when:
+    - sudo|success
   stat:
     path: /usr/local/etc/sudoers
   register: local_sudoers
 
 - name: Allow password-less sudo in /usr/local/etc/sudoers
   become: true
-  when: local_sudoers.stat.exists
+  when:
+    - sudo|success
+    - local_sudoers.stat.exists
   copy:
     src: sudoers
     dest: /usr/local/etc/sudoers.d/ansible

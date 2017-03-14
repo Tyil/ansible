@@ -6,6 +6,11 @@ main()
 	shift
 
 	ansible-playbook ~ansible/playbooks/"${playbook}".yaml "$@"
+
+	if [ "$?" = 0 ]
+	then
+		rm ~ansible/playbooks/"${playbook}".retry
+	fi
 }
 
 main "$@"
