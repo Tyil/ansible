@@ -7,8 +7,32 @@
 - name: Setup sudo
   include: sudo.yaml
 
-- name: Install basic softwares
-  include: install.yaml
+- name: Install basic software packages
+  become: true
+  package:
+    name: "{{ item }}"
+  with_items:
+    - git
+    - mosh
+    - tmux
+    - vim
+    - vnstat
+    - zsh
+
+- name: Create databases for vnstat
+  become: true
+  ignore_errors: true
+  shell: "vnstat --create -i {{ item }}"
+  with_items: "{{ ansible_interfaces }}"
+
+- name: Enable new services
+  become: true
+  service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  with_items:
+    - vnstat
 
 - name: Make sure the user exists
   become: true
