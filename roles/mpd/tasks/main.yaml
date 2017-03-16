@@ -9,12 +9,14 @@
   become: true
   package:
     name: "{{ mpd_pkg }}"
+  register: installation
 
 - name: Install configuration file
   become: true
   template:
     src: mpd.j2
     dest: "{{ install_prefix }}etc/{{ mpd_pkg }}.conf"
+  register: configuration
 
 - name: Create mpd lib dirs
   become: true
@@ -24,11 +26,21 @@
     owner: mpd
     group: "{{ mpd_group }}"
     recurse: true
+  register: directories
 
 - name: Enable the mpd service
   become: true
   service:
     name: "{{ mpd_pkg }}"
     enabled: true
-    state: started
+
+- name: Restart the mpd service
+  when:
+    configuration|changed or
+    directories|changed or
+    installation|changed
+  become: true
+  service:
+    name: "{{ mpd_pkg }}"
+    state: restarted
 

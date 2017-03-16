@@ -23,6 +23,13 @@ bind_to_address     "{{ install_prefix }}var/lib/mpd/socket"
 port                "6600"
 filesystem_charset  "UTF-8"
 
+# remote connection details
+{% if mpd_passwords is defined %}
+{% for password, permissions in mpd_passwords.items() %}
+password "{{ password }}@{{ permissions }}"
+{% endfor %}
+{% endif %}
+
 # inputs
 input {
 	plugin "curl"
