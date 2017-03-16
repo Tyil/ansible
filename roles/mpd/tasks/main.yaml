@@ -21,11 +21,14 @@
 - name: Create mpd lib dirs
   become: true
   file:
-    path: "{{ install_prefix }}var/lib/mpd"
+    path: "{{ install_prefix }}var/lib/{{ item }}"
     state: directory
     owner: mpd
     group: "{{ mpd_group }}"
     recurse: true
+  with_items:
+    - mpd
+    - mpd/playlists
   register: directories
 
 - name: Enable the mpd service
@@ -33,12 +36,15 @@
   service:
     name: "{{ mpd_pkg }}"
     enabled: true
+    state: started
+  register: service
 
 - name: Restart the mpd service
   when:
-    configuration|changed or
-    directories|changed or
-    installation|changed
+    - configuration|changed or
+      directories|changed or
+      installation|changed
+    - service|succeeded
   become: true
   service:
     name: "{{ mpd_pkg }}"

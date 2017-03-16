@@ -5,7 +5,10 @@ music_dir: /var/media/music
 audio_outputs:
   alsa
   pulse
-http_port: 8000
+public: false
+http:
+  encoding: flac
+  port: 8000
 shout:
   name: Localhost
   host: 127.1

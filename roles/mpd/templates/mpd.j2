@@ -20,6 +20,10 @@ group  "{{ mpd_group }}"
 # connectivity
 bind_to_address     "localhost"
 bind_to_address     "{{ install_prefix }}var/lib/mpd/socket"
+{% if public %}
+bind_to_address     "0.0.0.0"
+bind_to_address     "::0"
+{% endif %}
 port                "6600"
 filesystem_charset  "UTF-8"
 
@@ -53,9 +57,9 @@ audio_output {
 audio_output {
 	type       "httpd"
 	name       "HTTP"
-	encoder    "opus"
-	port       "{{ http_port }}"
-	quality    "8.0"
+	encoder    "{{ http.encoding }}"
+	port       "{{ http.port }}"
+	quality    "10.0"
 	format     "44100:16:1"
 	always_on  "yes"
 	tags       "yes"
