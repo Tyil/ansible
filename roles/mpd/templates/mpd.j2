@@ -1,0 +1,79 @@
+# general
+log_level          "default"
+auto_update        "yes"
+
+# files and directories
+music_directory          "{{ music_dir }}"
+playlist_directory       "{{ install_prefix }}var/lib/mpd/playlists/"
+db_file                  "{{ install_prefix }}var/lib/mpd/tag_cache"
+log_file                 "{{ install_prefix }}var/lib/mpd/mpd.log"
+pid_file                 "{{ install_prefix }}var/lib/mpd/pid"
+state_file               "{{ install_prefix }}var/lib/mpd/state"
+sticker_file             "{{ install_prefix }}var/lib/mpd/sticker.sql"
+follow_outside_symlinks  "yes"
+follow_inside_symlinks   "yes"
+
+# permissions
+user   "mpd"
+group  "{{ mpd_group }}"
+
+# connectivity
+bind_to_address     "localhost"
+bind_to_address     "{{ install_prefix }}var/lib/mpd/socket"
+port                "6600"
+filesystem_charset  "UTF-8"
+
+# inputs
+input {
+	plugin "curl"
+}
+
+# outputs
+{% if "alsa" in audio_outputs %}
+audio_output {
+	type       "alsa"
+	name       "ALSA"
+	mixer_type "software"
+}
+{% endif %}
+{% if "pulse" in audio_outputs %}
+audio_output {
+	type  "pulse"
+	name  "PulseAudio"
+}
+{% endif %}
+{% if "httpd" in audio_outputs %}
+audio_output {
+	type       "httpd"
+	name       "HTTP"
+	encoder    "opus"
+	port       "{{ http_port }}"
+	quality    "8.0"
+	format     "44100:16:1"
+	always_on  "yes"
+	tags       "yes"
+}
+{% endif %}
+{% if "shout" in audio_outputs %}
+audio_output {
+	type       "shout"
+	encoding   "ogg"
+	name       "Shoutcast output to {{ shout.name }}"
+	host       "{{ shout.host }}"
+	port       "{{ shout.port }}"
+	mount      "{{ shout.mount }}"
+	password   "{{ shout.password }}"
+	bitrate    "192"
+	format     "44100:16:1"
+	always_on  "yes"
+	tags       "yes"
+}
+{% endif %}
+
+audio_output {
+	type   "fifo"
+	name   "FIFO output"
+	path   "/tmp/mpd.fifo"
+	format "44100:16:2"
+}
+

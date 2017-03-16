@@ -1,0 +1,15 @@
+install_prefix: /
+mpd_pkg: mpd
+mpd_group: mpd
+music_dir: /var/media/music
+audio_outputs:
+  alsa
+  pulse
+http_port: 8000
+shout:
+  name: Localhost
+  host: 127.1
+  port: 8443
+  mount: /stream.ogg
+  password: none
+

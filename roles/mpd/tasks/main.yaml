@@ -1,0 +1,34 @@
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "distro/{{ ansible_os_family }}.yaml"
+      skip: true
+
+- name: Install mpd
+  become: true
+  package:
+    name: "{{ mpd_pkg }}"
+
+- name: Install configuration file
+  become: true
+  template:
+    src: mpd.j2
+    dest: "{{ install_prefix }}etc/{{ mpd_pkg }}.conf"
+
+- name: Create mpd lib dirs
+  become: true
+  file:
+    path: "{{ install_prefix }}var/lib/mpd"
+    state: directory
+    owner: mpd
+    group: "{{ mpd_group }}"
+    recurse: true
+
+- name: Enable the mpd service
+  become: true
+  service:
+    name: "{{ mpd_pkg }}"
+    enabled: true
+    state: started
+
