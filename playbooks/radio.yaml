@@ -1,9 +1,0 @@
----
-- hosts: fileservers
-  roles:
-    - mpd
-  vars:
-    mpd_group: rtorrent
-    audio_outputs:
-      http
-
